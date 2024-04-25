@@ -1,0 +1,145 @@
+import random
+
+def welcomeDisplay():
+    print("\n1 - Display Rules")
+    print("2 - Start Game")
+    print("3 - Display Stats")
+    print("4 - Quit the Program\n")
+
+def displayRules(points,die,discard):
+    print(f"Your Goal: Score as close to {points} as possible.\n")
+    print(f" Rule 1: If a player totals a score over {points}, the hand is a BUST and results in a LOSS.")
+    print(f" Rule 2: If 1 or more players are BUST OR both players choose to STAY, the game ends.")
+    print(f" Rule 3: Once a player totals a score of atleast {discard}, All but 1 of ({die}) die will be discarded for the rest of the round.")
+    print(f"\nNote: Every turn you will decide to either roll your die or stay to pass your turn.\n")
+
+def userInput():
+    try:
+        num = int(input("Please enter your selection here: "))
+        while num < 1 or num > 4:
+            print("That doesn't seem quite right... Try again.")
+            num = int(input("Please enter your selection here: "))
+        return num
+    except:
+        print("-"*80)
+        print("Something went wrong!!!")
+        print("Closing program...")
+        return 4
+    
+def rollConfirm(points,die):
+    userInput = ""
+    print(f"Would you like to roll this round? You currently have {points} points.")
+    userInput = input(f"'y' to roll {die} die OR 'n' to stay this round. (y/n): ")
+    while userInput != "y" and userInput != "n":
+        try:
+            print(f"\nInvalid Input... Try again.")
+            print(f"Would you like to roll this round? You currently have {points} points.")
+            userInput = input(f"'y' to roll {die} die OR 'n' to stay this round. (y/n): ")
+        except:
+            print("Something went wrong!!!")
+            userInput = "n"
+    return userInput
+
+def rollConfirmHouse(points,rule):
+    if points < rule:
+        return "y"
+    else:
+        return "n"
+
+def rollDie(points,die):
+    roll = random.randint(1,6)
+    roll2 = random.randint(1,6)
+    if die == 2:
+        print(f"You rolled a {roll} and a {roll2}!")
+        points = points + roll + roll2
+    elif die == 1:
+        print(f"You rolled a {roll}!")
+        points = points + roll
+    input(f"\nEnter anything to continue. ")
+    return points
+
+def houseRoll(points,die):
+    roll = random.randint(1,6)
+    roll2 = random.randint(1,6)
+    if die == 2:
+        print(f"The house rolled a {roll} and a {roll2}!")
+        points = points + roll + roll2
+    elif die == 1:
+        print(f"The house rolled a {roll}!")
+        points = points + roll
+    input(f"\nEnter anything to continue. ")
+    return points
+    
+def main():
+    # Important for 'while' loops
+    PROGRAM_ACTIVE = True
+    GAME_ACTIVE = True
+
+    # Constants for Gameplay, changing these constant may severely alter gameplay.
+    WINNING_SCORE = 21
+    HOUSE_STAY_RULE = 17
+    DISCARD_DIE_RULE = 14
+    MAX_DIE_AMOUNT = 2
+
+    dieAmount = MAX_DIE_AMOUNT
+    houseScore = 0
+    playerScore = 0
+
+    while PROGRAM_ACTIVE == True:
+        welcomeDisplay()
+        userSelection = userInput()
+        print("-"*80)
+
+        if userSelection == 1:
+            displayRules(WINNING_SCORE,MAX_DIE_AMOUNT,DISCARD_DIE_RULE)
+            input("Enter anything to continue. ")
+            print("-"*80)
+        elif userSelection == 2:
+            # Replay
+            if GAME_ACTIVE == False:
+                GAME_ACTIVE = True
+                dieAmount = MAX_DIE_AMOUNT
+                houseScore = 0
+                playerScore = 0
+
+            # Actual Game
+            while GAME_ACTIVE == True:
+                print(f"House points: {houseScore}")
+                print(f"Your points: {playerScore}\n")
+                if playerScore > DISCARD_DIE_RULE or houseScore > DISCARD_DIE_RULE:
+                    dieAmount = 1
+                playerDecision = rollConfirm(playerScore,dieAmount)
+                houseDecision = rollConfirmHouse(houseScore,HOUSE_STAY_RULE)
+
+                if playerDecision == "n" and houseDecision == "n":
+                    print("-"*80)
+                    print("Both players have to decided to stay!")
+                    GAME_ACTIVE = False
+                if playerDecision == "y":
+                    print("-"*80)
+                    playerScore = rollDie(playerScore,dieAmount)
+                    if playerScore > WINNING_SCORE:
+                        print("You have a bust!")
+                        GAME_ACTIVE = False
+
+                if GAME_ACTIVE == True:
+                    if houseDecision == "y":
+                        print("-"*80)
+                        print("The house has decided to roll!\n")
+                        houseScore = houseRoll(houseScore,dieAmount)
+                        if houseScore > WINNING_SCORE:
+                            print("The house has a bust!")
+                            GAME_ACTIVE = False
+                    elif houseDecision == "n":
+                        print("-"*80)
+                        print("The house has decided to stay!")
+                print("-"*80)
+            print(f"House points: {houseScore}")
+            print(f"Your points: {playerScore}")
+        elif userSelection == 3:
+            print("Stats")
+            input("Enter anything to continue. ")
+            print("-"*80)
+        elif userSelection == 4:
+            PROGRAM_ACTIVE = False
+main()
