@@ -55,7 +55,8 @@ def rollDie(points,die):
     elif die == 1:
         print(f"You rolled a {roll}!")
         points = points + roll
-    input(f"\nEnter anything to continue. ")
+    print("\n"
+    cont()
     return points
 
 def houseRoll(points,die):
@@ -67,8 +68,12 @@ def houseRoll(points,die):
     elif die == 1:
         print(f"The house rolled a {roll}!")
         points = points + roll
-    input(f"\nEnter anything to continue. ")
+		print("\n"
+    cont()
     return points
+
+def cont():
+		input("Enter anything to continue. ")
     
 def main():
     # Important for 'while' loops
@@ -92,7 +97,7 @@ def main():
 
         if userSelection == 1:
             displayRules(WINNING_SCORE,MAX_DIE_AMOUNT,DISCARD_DIE_RULE)
-            input("Enter anything to continue. ")
+            cont()
             print("-"*80)
         elif userSelection == 2:
             # Replay
@@ -138,7 +143,7 @@ def main():
             print(f"Your points: {playerScore}")
         elif userSelection == 3:
             print("Stats")
-            input("Enter anything to continue. ")
+            cont()
             print("-"*80)
         elif userSelection == 4:
             PROGRAM_ACTIVE = False
