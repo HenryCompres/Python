@@ -1,9 +1,11 @@
 import random
+import time
 
 def welcomeDisplay():
+    print("\nVingt-et-un")
     print("\n1 - Display Rules")
     print("2 - Start Game")
-    print("3 - Display Stats")
+    print("3 - Display History")
     print("4 - Quit the Program\n")
 
 def displayRules(points,die,discard):
@@ -11,7 +13,7 @@ def displayRules(points,die,discard):
     print(f" Rule 1: If a player totals a score over {points}, the hand is a BUST and results in a LOSS.")
     print(f" Rule 2: If 1 or more players are BUST OR both players choose to STAY, the game ends.")
     print(f" Rule 3: Once a player totals a score of atleast {discard}, All but 1 of ({die}) die will be discarded for the rest of the round.")
-    print(f"\nNote: Every turn you will decide to either roll your die or stay to pass your turn.\n")
+    print(f"\nNote: Every turn you will decide to either roll your die or stay to pass your turn.")
 
 def userInput():
     try:
@@ -55,7 +57,6 @@ def rollDie(points,die):
     elif die == 1:
         print(f"You rolled a {roll}!")
         points = points + roll
-    print("\n"
     cont()
     return points
 
@@ -68,12 +69,11 @@ def houseRoll(points,die):
     elif die == 1:
         print(f"The house rolled a {roll}!")
         points = points + roll
-		print("\n"
     cont()
     return points
 
 def cont():
-		input("Enter anything to continue. ")
+    input(f"\nEnter anything to continue. ")
     
 def main():
     # Important for 'while' loops
@@ -86,9 +86,15 @@ def main():
     DISCARD_DIE_RULE = 14
     MAX_DIE_AMOUNT = 2
 
+    LINEFEED = "\n"
+
+    roundWinner = ""
     dieAmount = MAX_DIE_AMOUNT
     houseScore = 0
     playerScore = 0
+    readFull = "n"
+
+    gameWinTally = [0,0,0]
 
     while PROGRAM_ACTIVE == True:
         welcomeDisplay()
@@ -100,6 +106,8 @@ def main():
             cont()
             print("-"*80)
         elif userSelection == 2:
+            name = input("Please enter your name: ")
+            name = "," + name
             # Replay
             if GAME_ACTIVE == False:
                 GAME_ACTIVE = True
@@ -119,12 +127,19 @@ def main():
                 if playerDecision == "n" and houseDecision == "n":
                     print("-"*80)
                     print("Both players have to decided to stay!")
+                    if playerScore > houseScore:
+                        roundWinner = ("Player Wins")
+                    elif houseScore > playerScore:
+                        roundWinner = ("House Wins")
+                    elif houseScore == playerScore:
+                        roundWinner = ("Tied")
                     GAME_ACTIVE = False
                 if playerDecision == "y":
                     print("-"*80)
                     playerScore = rollDie(playerScore,dieAmount)
                     if playerScore > WINNING_SCORE:
                         print("You have a bust!")
+                        roundWinner = ("House Wins")
                         GAME_ACTIVE = False
 
                 if GAME_ACTIVE == True:
@@ -134,15 +149,90 @@ def main():
                         houseScore = houseRoll(houseScore,dieAmount)
                         if houseScore > WINNING_SCORE:
                             print("The house has a bust!")
+                            roundWinner = ("Player Wins")
                             GAME_ACTIVE = False
                     elif houseDecision == "n":
                         print("-"*80)
-                        print("The house has decided to stay!")
+                        print("The house has decided to stay!") 
                 print("-"*80)
+
+                roundStat = (f"{str(houseScore)}-{str(playerScore)}," + roundWinner + name + LINEFEED)
+            fileObject = open("gameStats.txt","a")
+
+            fileObject.write(roundStat)
+
+            fileObject.close()
+
             print(f"House points: {houseScore}")
             print(f"Your points: {playerScore}")
         elif userSelection == 3:
-            print("Stats")
+            print("History\n")
+
+            fileObject = open("gameStats.txt","r")
+            inputLine = fileObject.readline()
+
+            if inputLine != "":
+                inputLine = inputLine.rstrip(LINEFEED)
+                inputLineList = inputLine.split(",")
+                roundScore = inputLineList[0].split("-")
+
+                if 'Player Wins' in inputLineList:
+                    gameWinTally[0] += 1 
+                elif 'House Wins' in inputLineList:
+                    gameWinTally[1] += 1 
+                elif 'Tied' in inputLineList:
+                    gameWinTally[2] += 1 
+
+                inputLine = fileObject.readline()
+                
+                while inputLine != "":
+                    inputLine = inputLine.strip(LINEFEED)
+                    inputLineList = inputLine.split(",")
+                    roundScore = inputLineList[0].split("-")
+
+                    if 'Player Wins' in inputLineList:
+                        gameWinTally[0] += 1 
+                    elif 'House Wins' in inputLineList:
+                        gameWinTally[1] += 1 
+                    elif 'Tied' in inputLineList:
+                        gameWinTally[2] += 1 
+
+                    inputLine = fileObject.readline()
+
+                print(f"Total Player Wins: {gameWinTally[0]}{LINEFEED}Total House Wins:{gameWinTally[1]}{LINEFEED}Total Tied: {gameWinTally[2]}")
+                print("-"*80)
+            fileObject.close()
+
+            print(f"Would you like to read the full history?")
+            readFull = input(f"'y' to display more details, enter 'n' if not. (y/n): ")
+            while readFull != "y" and readFull != "n":
+                try:
+                    print(f"\nInvalid Input... Try again.")
+                    print(f"Would you like to read the full history?")
+                    readFull = input(f"'y' to display more details, enter 'n' if not. (y/n): ")
+                except:
+                    print("Something went wrong!!!")
+                    readFull = "n"
+            print("-"*80)
+            if readFull == "y":
+                fileObject = open("gameStats.txt","r")
+                inputLine = fileObject.readline()
+                gameCounter = 0
+                while inputLine != "":
+                    inputLine = inputLine.rstrip(LINEFEED)
+                    inputLine = inputLine.split(",")
+                    inputLine[0] = "Final Score: " + inputLine[0]
+                    inputLine[1] = "Game Outcome: " + inputLine[1]
+                    inputLine[2] = "Player Name: " + inputLine[2]
+                    print(f"Game {gameCounter+1}: {inputLine}")
+                    gameCounter += 1
+                    inputLine = fileObject.readline()
+                fileObject.close()
+
+            gameCounter = 0
+            gameWinTally[0] = 0 # Tally Reset
+            gameWinTally[1] = 0
+            gameWinTally[2] = 0
             cont()
             print("-"*80)
         elif userSelection == 4:
