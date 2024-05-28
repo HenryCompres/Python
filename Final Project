@@ -1,3 +1,30 @@
+# FinalProject.py
+# 
+# April 20, 2024
+# Description: Vingt-et-un, a six-sided dice game where the goal is to get as close to 21 points as possible without going over! Made as a python game!
+
+# Breakdown(IPO):
+    # DISPLAY WELCOME
+    #   gives user options
+
+    # Player picks (1-4) -> 
+    # 1 - RULES
+
+    # 2 - GAMEPLAY
+    # 2.1 - Ask player if they want to (stay/roll)
+    # 2.1.1 - roll die if (y) elif (n), check house roll w/ rules (y/n)
+    # 2.1.1.1 - if house & player role == (n), end game else, cont w/ roll options
+    # 2.1.X - cont.
+    # 2.3 - Once game is over display (winner/loser/tie)
+    # 2.4 - APPEND PLAYER NAME, DATE/TIME OF GAME, PLAYER/HOUSE TOTAL to xyz.txt
+    # 2.5 - reset all necessary variables
+
+    # 3 - HISTORY
+    # 3.1 - TALLY of games played with total number of outcomes (eg. wins 2 ties 1 losses 3)
+    # 3.2 - allow option to see more detailed history (date, points, winner, player, etc.)
+
+    # 4 - QUIT
+
 import random
 import time
 
