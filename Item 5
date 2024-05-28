@@ -1,0 +1,121 @@
+# HW Assignment 5 - Functions
+# Henry Compres
+# March 20, 2024
+# Description: A program that calculates the area, perimeter, and circumference for shapes using the information provides by the user.
+#              it also shows three additional measures for different shapes.
+
+# Input: PI, user Length, user Width, user Radius, Length1, Width1, Radius, Length2, Width2,
+# Process: User Rectangle Area (l*w), User Rectangle Perimeter (l*2 + w*2), User Circle Area (PI*r^2), User Circle Circumference (2*PI*r), Rectangle Area, Rectangle Perimeter, Circle Area, No Input < 0, No str Inputs by user
+# Output: User Rect Area, User Rect Perim, User Circle Area, Circle Circum, Rect Area, Rect Perim, Circle Area,
+
+PI = 3.14159265359
+
+def RectangleArea(length,width):
+    try:
+        rectArea = length * width
+        return rectArea
+    except:
+        Wrong()
+    
+def RectanglePerimeter(length,width):
+    try:
+        rectPer = (length * 2) + (width * 2)
+        return rectPer
+    except:
+        Wrong()
+
+def CircleArea(radius):
+    global PI
+    try:
+        circArea = PI * (radius ** 2)
+        return circArea
+    except:
+        Wrong()
+
+def CircleCircumference(radius):
+    global PI
+    try:
+        circum = 2 * PI * radius
+        return circum
+    except:
+        Wrong()
+    
+def Intro():
+    print("\nHello World!\n")
+    
+def PrintInfo(rectArea, rectPer, circArea, circum):
+    print("Rectangle Area --------",rectArea)
+    print("Rectangle Perimeter ---",rectPer)
+    print("Circle Area -----------",circArea)
+    print("Circle Circumference --",circum)
+    print("-"*80)
+
+def GetLength():
+    try:
+        length = float(input("Please enter a length: "))
+        while length < 0:
+            Concat("Length")
+            length = float(input("Please enter a length: "))
+        return length
+    except:
+        Wrong()
+
+def GetWidth():
+    try:
+        width = float(input("Please enter a width: "))
+        while width < 0:
+            Concat("Width")
+            width = float(input("Please enter a width: "))
+        return width
+    except:
+        Wrong()
+    
+def GetRadius():
+    try:
+        radius = float(input("Please enter a radius: "))
+        while radius < 0:
+            Concat("Radius")
+            radius = float(input("Please enter a radius: "))
+        return radius
+    except:
+        Wrong()
+    
+def Wrong():
+    print("Something went wrong!")
+    return None
+
+def Concat(inputType):
+    print(inputType + " must be greater than zero!")
+
+def main():
+    myLength = GetLength()
+    myWidth = GetWidth()
+    myRadius = GetRadius()
+    myRectangleArea = RectangleArea(myLength,myWidth)
+    myRectanglePerimeter = RectanglePerimeter(myLength,myWidth)
+    myCircleArea = CircleArea(myRadius)
+    myCircleCircumference = CircleCircumference(myRadius)
+
+    Intro()
+   
+    PrintInfo(myRectangleArea,myRectanglePerimeter,myCircleArea,myCircleCircumference)
+
+    customRectLength1 = 10
+    customRectWidth1 = 15
+
+    customCircRadius = 8
+
+    customRectLength2 = 20
+    customRectWidth2 = 12
+
+    print("Area of a Rectangle with the dimensions:",customRectLength1,"X",customRectWidth1)
+    print(RectangleArea(customRectLength1,customRectWidth1))
+           
+    print("Area of a Circle with a radius of",customCircRadius)
+    print(CircleArea(customCircRadius))
+	
+    print("Perimeter of a Rectangle with the dimensions:",customRectLength2,"X",customRectWidth2)
+    print(RectanglePerimeter(customRectLength2,customRectWidth2))
+
+    print("\nThank you for using my program!")
+main()
