@@ -1,0 +1,80 @@
+# HW Assignment 3 - Decisions and Loops
+# Henry Compres
+# Feburary 27, 2024
+# Description: A list game that the user input numbers into for cool results.
+
+# Input: my answer(constant), playagain(constant), number of questioned asked(constant, 5), list mentioned, user input values
+# Process: ask to play if yes, ask user 5 questions(random number input), append user inputs to list for display, 
+#          sort list in ASC, length of list, delete an item from list, 
+# Output: Display the title, intro, rules, list, sorted list(ASC), length of list, sum of list, average of list,
+
+def main():
+    userList = []
+    MY_ANSWER = 7
+    playAgain = 1
+    questionsAsked = 5
+    listMeasure = 0
+
+    print("Number List Game\n")
+
+    print("Welcome to my list game! This program only accepts numbers as input!")
+
+    print("1 -> Yes\n0 -> No")
+    playAgain = int(input("Would you like to play my game? "))
+    while playAgain != 0 or playAgain == 1:
+        while playAgain < 0 or playAgain > 1: # Input Validation
+            print("-"*80)
+            print("Please enter a valid choice.")
+            print("1. Yes\n0. No")
+
+            playAgain = int(input("Would you like to play my game? "))
+        for currentPart in range(questionsAsked):
+            print("\nPart",(currentPart+1))
+            userInput = float(input("Please enter a number: "))
+            if userInput == MY_ANSWER:
+                print("\nWow! We picked the same number!\n")
+            userList.append(userInput)
+            print("Here is how list currently looks like!\n",userList)
+        print("Those are some pretty cool numbers, this is the number I picked:",MY_ANSWER)
+        print("-"*80)
+        print("Now before we do anything else let me sort this list for you.")
+        userList.sort() # Sort in ASC
+        print(userList)
+        print("Ahh, much better.")
+
+        print("\nThe new last item in the list is:\t",userList[-1]) # Display last item
+
+        print("\nThe number of items in the list is:\t",len(userList)) # Display item count
+
+        print("\nLet's remove an item from the list!")
+        print(userList)
+        userDel = float(input("Enter the number you want to delete! "))
+        while userDel not in userList:
+            print("Sorry, that item is not in the list, please try again!")
+            print(userList)
+            userDel = float(input("Enter the item you want to delete! "))
+        del userList[userList.index(userDel)]
+
+        print("\nThe new number of items is:\t",len(userList)) # Display item count
+
+        print("\nI can do some fun math with the numbers in this list!\n")
+
+        while listMeasure != len(userList): # Adds index + first number
+            print("Number",(listMeasure+1),"plus the first number in the list (",userList[0],") is:\t",(userList[(listMeasure-1)]+userList[0]))
+            listMeasure += 1
+        listMeasure = 0
+        # Sum & Average
+        print("\nHere is the sum of items in the list:", sum(userList),"and here is the average:",(sum(userList)/len(userList)))
+
+        print("\n1 -> Yes\n0 -> No")
+        playAgain = int(input("\nWould you like to play my game again? "))
+        userList = []
+        if playAgain != 1 or playAgain != 0:
+            while playAgain < 0 or playAgain > 1: # Input Validation
+                print("-"*80)
+                print("Please enter a valid choice.")
+                print("1. Yes\n0. No")
+
+                playAgain = int(input("Would you like to play my game? "))
+    print("Goodbye!")
+main()
