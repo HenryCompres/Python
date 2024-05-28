@@ -1,0 +1,84 @@
+# HW Assignment 6.py
+# Henry Compres
+# April 7, 2024
+# Description: A number guessing game that gives the user 7 chances to guess a mystery number.
+
+# I: user Guess (1-100), user playAgain (Y/N), Mystery Constant (Random Int), Attempt Constant (0), 
+#    Attempt Cap Constant (7), WIN condition CONSTANT (Default False), Preset user Guess (0),
+# P: Validate user inputs (user Guess, user playAgain), Check user Guess == OR < OR > Mystery Constant,
+#    count Attempts made (Attempt Constant, Attempt Cap Constant)
+# O: If user Guess is TOO LOW, TOO HIGH, or == Mystery Constant, If user Guess is INVALID INPUT, 
+#    if user playAgain is INVALID INPUT
+
+from random import randint
+from time import sleep
+
+def setMysteryNumber(first,last):
+    mysteryNumber = randint(first,last)
+    return mysteryNumber
+
+def getGuess(first,last):
+    try:
+        guess = int(input("Enter your guess (1-100): "))
+        while guess < first or guess > last:
+            print("Error ... Incorrect number. Please try again.")
+            guess = int(input("Enter your guess (1-100): "))
+        return guess
+    except:
+        print("Error ... Invalid Input. Next attempt.")
+        return 0
+
+def guessWin(number,guess):
+    if guess > number:
+        sleep(1)
+        print("Too High...")
+        return False
+    elif guess < number:
+        sleep(1)
+        print("Too Low...")
+        return False
+    elif guess == number:
+        sleep(1)
+        return True
+
+def playAgainInput():
+    try:
+        playAgain = input("\nWould you like to try again (Y/N)? ")
+        while playAgain != "Y" and playAgain != "N":
+            print("\nError ... Invalid Input. Please try again.")
+            playAgain = input("Would you like to try again (Y/N)? ")
+        return playAgain
+    except:
+        print("Something went wrong... Ending the program.")
+        return "N"
+
+def main():
+    NUMBER_FLOOR = 1
+    NUMBER_CEIL = 100
+    MYSTERY_NUMBER = setMysteryNumber(NUMBER_FLOOR,NUMBER_CEIL)
+    ATTEMPT = 0
+    ATTEMPT_CAP = 7
+    WIN = False
+
+    guess = 0
+
+    print("\nGuess the Mystery Number ...")
+
+    while WIN == False and ATTEMPT < ATTEMPT_CAP:
+        print("-"*80)
+        print("Round",ATTEMPT+1,"of",ATTEMPT_CAP)
+        ATTEMPT += 1
+        guess = getGuess(NUMBER_FLOOR,NUMBER_CEIL)
+        WIN = guessWin(MYSTERY_NUMBER,guess)
+    if WIN == True:
+        print("\nCongratulations ... You guessed the Mystery Number!")
+    elif WIN == False:
+        print("\nYou ran out of attempts...")
+        print("The Mystery Number was...",MYSTERY_NUMBER)
+
+    playAgain = playAgainInput()
+    if playAgain == "Y":
+        main()
+    else:
+        print("Goodbye!")
+main()
