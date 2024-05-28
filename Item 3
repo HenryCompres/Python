@@ -1,0 +1,79 @@
+# HW Assignment 3 - Decisions and Loops
+# Henry Compres
+# Feburary 20, 2024
+# Description:  A program that will display a menu of snacks/items and prices the user can choose from. 
+#               after the user selects one of many options the program will display a subtotal after each selection.
+#               once the final item has been selected the program will display a final subtotal, tax owed, and grand total.
+
+# Input: name, order selection, order finalization command, menu
+# Process: allow the selection of menu items, calculate and print the subtotal and grand total, process input validation to ensure items on the list are being selected
+# Output: subtotal, name, menu with pricing
+
+def main():
+    TAX = .07
+    menu = [["Hot Dog", 15.99],["Boiled Donut", 19.99],["Fried Oreos", 7.99],["Sesame Fries", 3.99],["Roasted Duck", 11.99],["Raw Egg", 1.99]] # [[Name, Price], ...]
+    subtotal = 0 
+    confirmation = 1
+    userInput = 0
+    
+    print("\nWelcome to my Snack Bar!\n")
+
+    name = input("Please enter the name for the order: ")
+
+    while userInput != 0 or confirmation == 1:
+        print("\nPlease choose from the menu:")
+        print("1.",menu[0][0],"-",menu[0][1])
+        print("2.",menu[1][0],"-",menu[1][1])
+        print("3.",menu[2][0],"-",menu[2][1])
+        print("4.",menu[3][0],"-",menu[3][1])
+        print("5.",menu[4][0],"-",menu[4][1])
+        print("6.",menu[5][0],"-",menu[5][1])
+        print("0. End Order\n")
+
+        print("Your current subtotal is:\t","$",format(subtotal,".2f"),"\n",sep="")
+        userInput = int(input("Please enter the number of the item you want to order: "))
+
+        # Input Validation.
+        while userInput < 0 or userInput > len(menu):
+            print("\nPlease choose from the menu:")
+            print("1.",menu[0][0],"-",menu[0][1])
+            print("2.",menu[1][0],"-",menu[1][1])
+            print("3.",menu[2][0],"-",menu[2][1])
+            print("4.",menu[3][0],"-",menu[3][1])
+            print("5.",menu[4][0],"-",menu[4][1])
+            print("6.",menu[5][0],"-",menu[5][1])
+            print("0. End Order\n")
+
+            print("Your current subtotal is:\t","$",format(subtotal,".2f"),"\n",sep="")
+            userInput = int(input("Please enter a valid order!!! (1-6): "))
+        # SUBTOTAL UPDATE / ORDER CONFIRMATION
+        if userInput != 0: # UPDATE
+            subtotal = subtotal + menu[userInput-1][1]
+        elif userInput == 0: # CONFIRMATION
+            print("-"*80)
+            print("Are you sure you would like to end your order?\n")
+            confirmation = int(input("Enter '0' to end your order, or '1' to cancel: "))
+            while confirmation != 0 and confirmation != 1:
+                print("Invalid Input!!!")
+                confirmation = int(input("Please enter '0' to end your order, or '1' to cancel: "))
+            if confirmation == 0:
+                print("-"*80)
+                print("Subtotal:\t","$",format(subtotal,".2f"),sep="")
+                print("Taxes:\t\t","$",format((subtotal*TAX),".2f"),sep="")
+                print("Grand Total:\t","$",format(subtotal + (subtotal*TAX),".2f"),sep="")
+                print("\nThank you",name,"for your business. Have a nice day!")
+                print("-"*80)
+                newOrder = int(input("Please enter '0' to end the program, or '1' to start a new order: "))
+                while newOrder != 0 and newOrder != 1:
+                    print("Invalid Input!!!")
+                    newOrder = int(input("Please enter '0' to end the program, or '1' to start a new order: "))
+                if newOrder == 1:
+                    print("-"*80)
+                    name = input("Please enter the name for the order: ")
+                    subtotal = 0
+                    confirmation = 1
+                    userInput = 0
+                elif newOrder == 0:
+                    userInput = 0
+    print("\nGoodbye!")
+main()
